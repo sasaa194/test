@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>客户需求收集表</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-solid: #ffffff;
+      --text: #132238;
+      --muted: #6b7a90;
+      --line: #dde5ef;
+      --brand: #1f5eff;
+      --brand-2: #143fb5;
+      --good: #0f9d58;
+      --warn: #c37a00;
+      --bad: #a94040;
+      --shadow: 0 18px 60px rgba(19, 34, 56, 0.12);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(31, 94, 255, 0.12), transparent 36%),
+        linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 16px 28px;
+    }
+
+    .hero {
+      padding: 12px 2px 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(31, 94, 255, 0.1);
+      color: var(--brand-2);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 8vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 42rem;
+    }
+
+    .layout {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(221, 229, 239, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 18px 0;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #22324a;
+    }
+
+    .hint {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      padding: 14px 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(31, 94, 255, 0.55);
+      box-shadow: 0 0 0 4px rgba(31, 94, 255, 0.11);
+    }
+
+    .choice-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice-grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .choice-grid.cols-1 {
+      grid-template-columns: 1fr;
+    }
+
+    .choice {
+      position: relative;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.35;
+      transition: all 0.2s ease;
+    }
+
+    .choice input:checked + span {
+      border-color: rgba(31, 94, 255, 0.38);
+      background: linear-gradient(180deg, rgba(31, 94, 255, 0.1), rgba(31, 94, 255, 0.05));
+      color: var(--brand-2);
+      box-shadow: 0 8px 20px rgba(31, 94, 255, 0.08);
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .check-item input {
+      margin-top: 3px;
+      accent-color: var(--brand);
+    }
+
+    .check-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .check-item small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      color: #fff;
+      box-shadow: 0 16px 28px rgba(31, 94, 255, 0.22);
+    }
+
+    .btn-secondary {
+      background: #edf2fb;
+      color: #29415f;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .result-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-top {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      width: fit-content;
+    }
+
+    .result-badge.low {
+      background: rgba(168, 64, 64, 0.12);
+      color: var(--bad);
+    }
+
+    .result-badge.mid {
+      background: rgba(195, 122, 0, 0.12);
+      color: var(--warn);
+    }
+
+    .result-badge.high {
+      background: rgba(15, 157, 88, 0.12);
+      color: var(--good);
+    }
+
+    .result-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .result-card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .result-card p {
+      margin: 0;
+      color: #31445e;
+      line-height: 1.7;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .summary-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .summary-item .k {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-item .v {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .footnote {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      padding: 4px 2px 0;
+    }
+
+    @media (min-width: 760px) {
+      .layout {
+        grid-template-columns: 1.15fr 0.85fr;
+        align-items: start;
+      }
+
+      .result-panel {
+        position: sticky;
+        top: 18px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="badge">客户需求收集 · 手机端优先</div>
+      <h1>先填需求，再沟通</h1>
+      <p class="subtitle">
+        适合“录课 + 直播间搭建 + 课程上架服务”场景。先用这个页面筛一遍客户意向，
+        把反复解释的时间省下来，把精力留给更匹配的客户。
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">填写需求</h2>
+          <p class="section-desc">尽量按真实情况填写，提交后会自动给出意向判断和推荐回复话术。</p>
+        </div>
+        <div class="card-body">
+          <form id="leadForm">
+            <div class="field">
+              <label for="industry">1. 你的行业/赛道</label>
+              <input id="industry" name="industry" type="text" placeholder="例如：教育培训 / 电商 / 健身 / 美业 / 本地生活" />
+            </div>
+
+            <div class="field">
+              <label>2. 你现在想解决的问题</label>
+              <div class="checklist" id="problems">
+                <label class="check-item">
+                  <input type="checkbox" name="problem" value="录课" />
+                  <div>
+                    <strong>录课</strong>
+                    <small>想做课程录制、剪辑、包装、交付</small>
+                  </div>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" name="problem" value="直播" />
+                  <div>
+                    <strong>直播</strong>
+                    <small>想搭直播间、配设备、跑流程</small>
+                  </div>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" name="problem" value="小店上架" />
+                  <div>
+                    <strong>小店上架</strong>
+                    <small>想把课程或商品上到小店里</small>
+                  </div>
+                </label>
+                <label class="check-item">
+                  <input type="checkbox" name="problem" value="多平台开播" />
+                  <div>
+                    <strong>多平台开播</strong>
+                    <small>想同步到多个平台一起播</small>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="difficulty">3. 你当前最大的困难</label>
+              <textarea id="difficulty" name="difficulty" placeholder="例如：不会搭设备、不知道怎么定价、团队没人会剪辑、怕做出来没人买"></textarea>
+            </div>
+
+            <div class="field">
+              <label>4. 你的预算范围</label>
+              <div class="choice-grid cols-2" id="budgetGroup">
+                <label class="choice"><input type="radio" name="budget" value="99-299" checked /><span>99-299</span></label>
+                <label class="choice"><input type="radio" name="budget" value="300-999" /><span>300-999</span></label>
+                <label class="choice"><input type="radio" name="budget" value="1000-3000" /><span>1000-3000</span></label>
+                <label class="choice"><input type="radio" name="budget" value="3000以上" /><span>3000以上</span></label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>5. 你希望的服务形式</label>
+              <div class="choice-grid cols-2">
+                <label class="choice"><input type="radio" name="service" value="录播课" checked /><span>录播课</span></label>
+                <label class="choice"><input type="radio" name="service" value="线上1对1" /><span>线上1对1</span></label>
+                <label class="choice"><input type="radio" name="service" value="上门搭建" /><span>上门搭建</span></label>
+                <label class="choice"><input type="radio" name="service" value="线下课" /><span>线下课</span></label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="startTime">6. 你希望多久开始</label>
+              <select id="startTime" name="startTime">
+                <option value="马上">马上</option>
+                <option value="1周内">1周内</option>
+                <option value="1个月内">1个月内</option>
+                <option value="先了解再说">先了解再说</option>
+              </select>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">提交并生成结果</button>
+              <button class="btn btn-secondary" type="button" id="fillDemo">一键填充示例</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <aside class="card result-panel">
+        <div class="card-header">
+          <h2 class="section-title">结果预览</h2>
+          <p class="section-desc">提交后，这里会自动生成客户意向等级、推荐产品和回复话术。</p>
+        </div>
+        <div class="card-body">
+          <div class="result-top">
+            <div id="intentBadge" class="result-badge mid">客户意向等级：待提交</div>
+            <div class="summary-row">
+              <div class="summary-item">
+                <span class="k">推荐产品</span>
+                <span class="v" id="productText">等待提交</span>
+              </div>
+              <div class="summary-item">
+                <span class="k">是否继续沟通</span>
+                <span class="v" id="continueText">等待提交</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-card" style="margin-top: 12px;">
+            <h3>推荐我发送的话术</h3>
+            <p id="scriptText">提交后将自动生成适合你业务场景的回复话术。</p>
+          </div>
+
+          <div class="result-card">
+            <h3>客户摘要</h3>
+            <p id="summaryText">提交后显示行业、问题、预算和启动时间的简要总结。</p>
+          </div>
+
+          <p class="footnote">
+            说明：这个判断是一个轻量筛选逻辑，适合先分流客户。你后续也可以把结果接到企业微信、表单系统或数据库里。
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('leadForm');
+    const fillDemo = document.getElementById('fillDemo');
+    const intentBadge = document.getElementById('intentBadge');
+    const productText = document.getElementById('productText');
+    const continueText = document.getElementById('continueText');
+    const scriptText = document.getElementById('scriptText');
+    const summaryText = document.getElementById('summaryText');
+
+    const productMap = {
+      '录课': '录课搭建包 / 课程内容打磨',
+      '直播': '直播间搭建包 / 直播运营基础',
+      '小店上架': '课程上架包 / 小店开通与配置',
+      '多平台开播': '多平台开播搭建包 / 设备连线方案'
+    };
+
+    const serviceBoost = {
+      '录播课': 1,
+      '线上1对1': 2,
+      '上门搭建': 3,
+      '线下课': 2
+    };
+
+    const budgetBoost = {
+      '99-299': 0,
+      '300-999': 1,
+      '1000-3000': 2,
+      '3000以上': 3
+    };
+
+    const startBoost = {
+      '马上': 3,
+      '1周内': 2,
+      '1个月内': 1,
+      '先了解再说': 0
+    };
+
+    function getSelectedProblems() {
+      return Array.from(document.querySelectorAll('input[name="problem"]:checked')).map((el) => el.value);
+    }
+
+    function getValue(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      return selected ? selected.value : '';
+    }
+
+    function buildScript(level, problems, budget, service, startTime, difficulty) {
+      const firstProblem = problems[0] || '你的需求';
+      const urgencyLine = startTime === '马上' || startTime === '1周内'
+        ? '如果你想尽快落地，我建议我们先把方案定下来。'
+        : '如果你还在对比阶段，我可以先给你一个基础方案供你参考。';
+
+      return `你好，我看了你的需求，${firstProblem} 这块我可以帮你做对应方案。
+你现在的预算是 ${budget}，更适合走 ${service} 方式来推进。
+你提到的核心困难是：${difficulty || '还没具体展开'}。
+${urgencyLine}
+如果你愿意，我先帮你判断一下最合适的产品组合，再决定是否继续推进。`;
+    }
+
+    function evaluateLead(data) {
+      let score = 0;
+
+      score += Math.min(data.problems.length, 2);
+      score += budgetBoost[data.budget] || 0;
+      score += serviceBoost[data.service] || 0;
+      score += startBoost[data.startTime] || 0;
+
+      if (/不会|没人|卡住|着急|急|不会做|不懂/i.test(data.difficulty)) {
+        score += 1;
+      }
+
+      if (data.problems.length >= 2) {
+        score += 1;
+      }
+
+      let level = '低';
+      if (score >= 6) level = '高';
+      else if (score >= 3) level = '中';
+
+      let shouldContinue = '不建议';
+      if (level === '高' || data.startTime === '马上' || data.startTime === '1周内') {
+        shouldContinue = '建议';
+      } else if (data.budget === '3000以上') {
+        shouldContinue = '建议';
+      }
+
+      const products = data.problems.length
+        ? data.problems.map((item) => productMap[item]).join(' / ')
+        : '需求未明确，建议先引导澄清';
+
+      return { level, shouldContinue, products };
+    }
+
+    function renderResult(data) {
+      const result = evaluateLead(data);
+      const badgeClass = result.level === '高' ? 'high' : result.level === '中' ? 'mid' : 'low';
+      intentBadge.className = `result-badge ${badgeClass}`;
+      intentBadge.textContent = `客户意向等级：${result.level}`;
+
+      productText.textContent = result.products;
+      continueText.textContent = result.shouldContinue;
+      scriptText.textContent = buildScript(
+        result.level,
+        data.problems,
+        data.budget,
+        data.service,
+        data.startTime,
+        data.difficulty
+      );
+
+      summaryText.textContent = `行业/赛道：${data.industry || '未填写'}
+想解决的问题：${data.problems.join('、') || '未选择'}
+预算范围：${data.budget}
+服务形式：${data.service}
+希望多久开始：${data.startTime}`;
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      renderResult({
+        industry: document.getElementById('industry').value.trim(),
+        problems: getSelectedProblems(),
+        difficulty: document.getElementById('difficulty').value.trim(),
+        budget: getValue('budget'),
+        service: getValue('service'),
+        startTime: document.getElementById('startTime').value
+      });
+    });
+
+    fillDemo.addEventListener('click', () => {
+      document.getElementById('industry').value = '教育培训';
+      document.querySelectorAll('input[name="problem"]').forEach((input) => {
+        input.checked = ['直播', '小店上架'].includes(input.value);
+      });
+      document.getElementById('difficulty').value = '没有直播间搭建经验，也不清楚课程怎么上架，想尽快落地。';
+      document.querySelector('input[name="budget"][value="1000-3000"]').checked = true;
+      document.querySelector('input[name="service"][value="线上1对1"]').checked = true;
+      document.getElementById('startTime').value = '1周内';
+      renderResult({
+        industry: document.getElementById('industry').value.trim(),
+        problems: getSelectedProblems(),
+        difficulty: document.getElementById('difficulty').value.trim(),
+        budget: getValue('budget'),
+        service: getValue('service'),
+        startTime: document.getElementById('startTime').value
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    renderResult({
+      industry: '',
+      problems: [],
+      difficulty: '',
+      budget: getValue('budget'),
+      service: getValue('service'),
+      startTime: document.getElementById('startTime').value
+    });
+  </script>
+</body>
+</html>
