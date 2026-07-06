@@ -1,0 +1,16 @@
+{
+  "name": "oral-review",
+  "version": "1.0.0",
+  "description": "英语口语作业自动点评系统：飞书表单 → 多维表格 → 阿里云语音评测 → DeepSeek 评语 → 飞书机器人推送",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "setup": "node scripts/setup-bitable.js",
+    "seed": "node scripts/seed-test-record.js",
+    "test:mock": "node test/mock-e2e.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
